@@ -17,3 +17,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.Run();
+
+//Necessary for IntegrationTest project
+public partial class Program
+{
+
+}
