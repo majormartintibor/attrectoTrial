@@ -1,0 +1,24 @@
+services:
+
+    api:
+      build:
+        context: .
+        dockerfile: Feed.API/Dockerfile
+      container_name: FeedApi
+      environment: 
+        - ASPNETCORE_ENVIRONMENT=Development 
+        - ASPNETCORE_URLS=http://+:80
+      ports:
+        - 5000:80        
+      depends_on:
+        - database
+
+    database:
+      image: postgres:latest
+      container_name: FeedDatabase
+      environment:
+        - POSTGRES_DB=FeedDb
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      ports:
+        - 5432:5432

@@ -28,3 +28,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Feed.API.dll"]
+
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "Feed.API.dll"]

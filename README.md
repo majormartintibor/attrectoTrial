@@ -1,2 +1,1 @@
-# attrectoTrial
-Attrecto trial assignment
+Navigate into the Feed folder and run docker-compose up -d
