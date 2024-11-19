@@ -18,9 +18,9 @@ public sealed record GetFeedQuery()
 
 public static class Get
 {
-    public const string GetEndpoint = "/api/feed/{id:guid}";
+    public const string GetEndpoint = "/api/feed/";
     
-    [WolverineGet(GetEndpoint)]
+    [WolverineGet(GetEndpoint + "{id:guid}")]
     public static async Task<IResult> GetAsync(
         GetFeedQuery query,
         IMessageBus bus)

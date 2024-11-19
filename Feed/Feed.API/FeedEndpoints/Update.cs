@@ -18,9 +18,9 @@ public sealed record UpdateFeedCommand()
 
 public static class Update
 {
-    public const string UpdateEndpoint = "/api/feed/{id:guid}";
+    public const string UpdateEndpoint = "/api/feed/";
 
-    [WolverinePut(UpdateEndpoint)]
+    [WolverinePut(UpdateEndpoint + "{id:guid}")]
     public static async Task<IResult> UpdateAsync(
         UpdateFeedCommand command,
         IMessageBus bus)

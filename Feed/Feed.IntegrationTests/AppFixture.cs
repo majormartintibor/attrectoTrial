@@ -31,6 +31,9 @@ public sealed class AppFixture : IAsyncLifetime
 
                 //Initialize Databse here with BaselineData
             });
-        }, new AuthenticationStub());
+        }
+        // not yet needed, but we will use it!
+        //,new AuthenticationStub()
+        );
     }
 }

@@ -18,9 +18,9 @@ public sealed record ListFeedQuery()
 
 public static class List
 {
-    public const string GetEndpoint = "/api/feed";
+    public const string ListEndpoint = "/api/feed";
 
-    [WolverineGet(GetEndpoint)]
+    [WolverineGet(ListEndpoint)]
     public static async Task<IResult> ListAsync(
         ListFeedQuery query,
         IMessageBus bus)

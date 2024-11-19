@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Feed.API.FeedEndpoints;
+using Microsoft.AspNetCore.Http;
+using static Feed.API.FeedEndpoints.Create;
 
 namespace Feed.IntegrationTests.Feed;
 public sealed class CreateTests(AppFixture fixture) : IntegrationContext(fixture) 
@@ -9,8 +11,8 @@ public sealed class CreateTests(AppFixture fixture) : IntegrationContext(fixture
         var scenario = await Host.Scenario(x =>
         {
             x.Post
-                .Json("")
-                .ToUrl("");
+                .Json(new CreateFeedCommand())
+                .ToUrl(CreateEndpoint);
 
             x.StatusCodeShouldBe(StatusCodes.Status201Created);
         });
@@ -24,8 +26,8 @@ public sealed class CreateTests(AppFixture fixture) : IntegrationContext(fixture
         var scenario = await Host.Scenario(x =>
         {
             x.Post
-                .Json("")
-                .ToUrl("");
+                .Json(new CreateFeedCommand())
+                .ToUrl(CreateEndpoint);
 
             x.StatusCodeShouldBe(StatusCodes.Status201Created);
         });
@@ -39,8 +41,8 @@ public sealed class CreateTests(AppFixture fixture) : IntegrationContext(fixture
         var scenario = await Host.Scenario(x =>
         {
             x.Post
-                .Json("")
-                .ToUrl("");
+                .Json(new CreateFeedCommand())
+                .ToUrl(CreateEndpoint);
 
             x.StatusCodeShouldBe(StatusCodes.Status201Created);
         });

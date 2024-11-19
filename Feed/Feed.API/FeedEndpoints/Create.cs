@@ -33,7 +33,7 @@ public static class Create
 
             //HATEOAS to be truly restful
 
-            return TypedResults.Ok(feedId);
+            return TypedResults.Created("/feed", feedId);
             
         }
         catch (Exception ex)

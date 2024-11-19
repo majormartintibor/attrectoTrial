@@ -18,12 +18,12 @@ public sealed record DeleteFeedCommand()
 
 public static class Delete
 {
-    public const string DeleteEndpoint = "/api/feed/{id:guid}";
+    public const string DeleteEndpoint = "/api/feed/";
 
     //DELETE implies that the resource is permanently removed, which isn't the case for a soft delete.
     //Using PATCH makes it clear that I am modifying the resource's state rather than removing it.
     //Also PATCH is an idempotent operation, which means applying the same operation multiple times will have the same effect.
-    [WolverinePatch(DeleteEndpoint)]
+    [WolverinePatch(DeleteEndpoint + "{id:guid}")]
     public static async Task<IResult> DeleteAsync(
         DeleteFeedCommand command,
         IMessageBus bus)

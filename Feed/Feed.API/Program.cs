@@ -13,6 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddWolverineHttp();
 
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication();
+
 builder.Host.UseWolverine(opts =>
 {
     opts.Discovery.IncludeAssembly(typeof(AssemblyInfo).Assembly);
@@ -32,6 +35,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapWolverineEndpoints(opts =>
 {
