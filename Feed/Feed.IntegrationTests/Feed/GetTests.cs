@@ -1,5 +1,4 @@
 ﻿using Alba;
-using Feed.API.FeedEndpoints;
 using Feed.IntegrationTests.Feed.Fixtures;
 using static Feed.API.FeedEndpoints.Get;
 
@@ -12,9 +11,8 @@ public sealed class GetTests(AppFixture fixture) : IntegrationContext(fixture)
     {
         var scenario = await Host.Scenario(x =>
         {
-            x.Get
-                .Json(new GetFeedQuery())
-                .ToUrl(GetEndpoint + BaselineData.DefaultTextFeedId);
+            x.Get               
+                .Url(GetEndpoint + BaselineData.DefaultTextFeedId);
 
             x.StatusCodeShouldBeOk();
         });       
@@ -26,8 +24,7 @@ public sealed class GetTests(AppFixture fixture) : IntegrationContext(fixture)
         var scenario = await Host.Scenario(x =>
         {
             x.Get
-                .Json(new GetFeedQuery())
-                .ToUrl(GetEndpoint + BaselineData.DefaultImageFeedId);
+                .Url(GetEndpoint + BaselineData.DefaultImageFeedId);
 
             x.StatusCodeShouldBeOk();
         });
@@ -38,9 +35,8 @@ public sealed class GetTests(AppFixture fixture) : IntegrationContext(fixture)
     {
         var scenario = await Host.Scenario(x =>
         {
-            x.Get
-                .Json(new GetFeedQuery())
-                .ToUrl(GetEndpoint + BaselineData.DefaultVideoFeedId);
+            x.Get                
+                .Url(GetEndpoint + BaselineData.DefaultVideoFeedId);
 
             x.StatusCodeShouldBeOk();
         });

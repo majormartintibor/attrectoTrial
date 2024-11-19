@@ -29,9 +29,7 @@ public static class List
         {
             ListFeeds listFeeds = new();
 
-            await bus.InvokeAsync(listFeeds);
-
-            //HATEOAS to be truly restful
+            await bus.InvokeAsync(listFeeds);            
 
             return TypedResults.Ok();
 

@@ -2,10 +2,11 @@
 using Wolverine.Http;
 using Wolverine;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Feed.API.FeedEndpoints;
 
-public sealed record GetFeedQuery()
+public sealed record GetFeedQuery(Guid Id)
 {
     public sealed class GetFeedQueryValidator : AbstractValidator<GetFeedQuery>
     {
@@ -19,11 +20,14 @@ public sealed record GetFeedQuery()
 public static class Get
 {
     public const string GetEndpoint = "/api/feed/";
-    
-    [WolverineGet(GetEndpoint + "{id:guid}")]
+
+    [WolverineGet(GetEndpoint + "{id:guid}", RouteName = "Fasz")]
     public static async Task<IResult> GetAsync(
-        GetFeedQuery query,
-        IMessageBus bus)
+        [FromRoute] Guid id,
+        IMessageBus bus,
+        LinkGenerator linkGenerator,
+        HttpContext context
+        )
     {
         try
         {
@@ -32,13 +36,25 @@ public static class Get
             await bus.InvokeAsync(getFeed);
 
             //HATEOAS to be truly restful
+            var feed = new FeedDto
+            {
+                Id = id,
+                Links =
+                [                   
+                    new LinkDto("self", linkGenerator.GetUriByName(context, "GET_api_feed_id", new{id}) ?? string.Empty, "GET"),
+                    new LinkDto("list", linkGenerator.GetUriByName(context, "GET_api_feed", []) ?? string.Empty, "GET"),
+                    new LinkDto("update", linkGenerator.GetUriByName(context, "PUT_api_feed_id", new{id}) ?? string.Empty, "PUT"),
+                    new LinkDto("delete", linkGenerator.GetUriByName(context, "PATCH_api_feed_id", new{id}) ?? string.Empty, "PATCH"),
+                ]
+            };
 
-            return TypedResults.Ok();
+            return TypedResults.Ok(feed);
 
         }
         catch (Exception ex)
         {
             return TypedResults.BadRequest(ex);
         }
-    }
+    }   
 }
+

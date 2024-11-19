@@ -41,8 +41,7 @@ any business value. I prefer to use the term integration tests for this kind of 
 
 # Regarding REST (Representational State Transfer)
 
-Unfortunately our industry doesn't really know what REST actually means and where the term originates from. REST is an architectural style
-described by Roy Fielding. It can be found in Chapter 5 in his PhD dissertation 
+REST is an architectural style described by Roy Fielding. It can be found in Chapter 5 in his PhD dissertation 
 "Architectural Styles and the Design of Network-based Software Architectures". 
 Part of REST as described by Fielding is HATEAOS aka "Hypertext as the engine of application state" which is a fundamental concept of 
 REST that ensures a client interacts with a RESTful service through dynamic hyperlinks provided in responses. I have implemented a very
