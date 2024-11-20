@@ -1,4 +1,5 @@
 using Feed.Core;
+using Feed.Persistence;
 using Oakton;
 using Wolverine;
 using Wolverine.FluentValidation;
@@ -7,11 +8,22 @@ using Wolverine.Http.FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+//Setup to use multiple apsettings based om env variable
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddWolverineHttp();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+builder.Services.UsePersistence(connectionString);
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();

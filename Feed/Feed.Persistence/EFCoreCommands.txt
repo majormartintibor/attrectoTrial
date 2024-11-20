@@ -1,0 +1,10 @@
+﻿Install: dotnet tool install --global dotnet-ef
+
+dotnet ef migrations add InitialCreate
+dotnet ef migrations add InitialCreate --startup-project ../Feed.API
+
+dotnet ef database update
+dotnet ef database update --startup-project ../Feed.API
+
+dotnet ef database update [previous migration name] -> if the migration to remove has been applied
+dotnet ef migrations remove -> removes the last migration

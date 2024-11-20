@@ -24,6 +24,15 @@ I like this stack, because while it does enable me to build classic CRUD style s
 possibility to use PostgreSQL as a document store or even build full blown event sourced applications and turning PostgreSQL into an event store.
 Further more I even have the option to use the same database as relational db, document db and event store at the same time!
 
+## Additional notes
+Wolverine has strong EF core integration as well, I could have used Wolverine in the persistence layer as well. I purposely decided to not do so.
+Instead I wanted to show the Hexagonal aka Ports and Adapters approach, where the interface of outgoing ports (from the Cores perspective) is 
+defined in the core project, but implemented in the Persitence project. This approach has several benefits: there is no project dependency for the core,
+all dependencies are still pointing inwards, any dependency's implementation can be swapped out as long as the new implementation implements the
+interface. This makes it (somewhat) technology agnostic for the Core. It also is supposed to make testing simpler as Intefaces can me mocked.
+I won't write tests using mocking, because I believe these functionalities are not part of the Unit Tests scope, but belong to the Integration Tests level.
+Generally I am not a fan of wrapping DbContext with the repository pattern, but this is something folks do, so I wanted to showcase it.
+
 # Testing
 
 ## Unit Tests
@@ -56,3 +65,22 @@ REST is an architectural style described by Roy Fielding. It can be found in Cha
 Part of REST as described by Fielding is HATEAOS aka "Hypertext as the engine of application state" which is a fundamental concept of 
 REST that ensures a client interacts with a RESTful service through dynamic hyperlinks provided in responses. I have implemented a very
 simple example of it. I wish our industry would use HATEAOS more.
+
+# Additional Notes
+
+## Primitive Obsession
+
+Depending on the project I would consider to use explicit types for cocnepts like Title, Description, ImageUrl, VideoUrl, etc.
+instead of using c# primitives like string. This is known as "primitive obsession". I am aware of the concept, but considered
+it overengineering for this simple assignment project.
+
+## Auto mappers
+
+In this project I have to do some mappings between the Core Domain Model, the DTO's used in the API layer and the Entities in the
+persistence layer. I have worked with stuff like AutoMapper before, but I am not fan of it. I prefer to write my mappings manually
+for the main reason that is forces me to actively think it through what and why I am mapping. Also while I am generally in favor
+of using OSS, there is a certain risk associated with it.
+
+## Options pattern
+
+I know about it, probably did not have enough time

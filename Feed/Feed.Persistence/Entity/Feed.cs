@@ -1,16 +1,19 @@
 ﻿using Feed.Core.FeedDomain;
 
-namespace Feed.API.FeedEndpoints;
-
-//starting DTO draft
-public sealed record FeedDto
+namespace Feed.Persistence.Entity;
+public sealed class Feed
 {
+    public Feed()
+    {
+        
+    }
+
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;    
-    public List<LinkDto> Links { get; set; } = [];
+    public string Description { get; set; } = string.Empty;
     public Guid UserId { get; set; }
-    public FeedType FeedType { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
     public string VideoUrl { get; set; } = string.Empty;
+    public FeedType FeedType { get; set; }
+    public bool IsDeleted { get; set; }
 }
