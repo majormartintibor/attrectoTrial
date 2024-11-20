@@ -4,7 +4,7 @@ using Feed.IntegrationTests.Feed.Fixtures;
 using static Feed.API.FeedEndpoints.Update;
 
 namespace Feed.IntegrationTests.Feed;
-public sealed class UpdateTests(AppFixture fixture) : IntegrationContext(fixture)
+public sealed class UpdateTests(AppFixture fixture) : GivenFeedsExist(fixture)
 {
     [Fact]
     public async Task Updating_a_Text_Feed_should_succeed()

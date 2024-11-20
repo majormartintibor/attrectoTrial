@@ -5,7 +5,7 @@ using static Feed.API.FeedEndpoints.Delete;
 
 namespace Feed.IntegrationTests.Feed;
 
-public sealed class SoftDeleteTests(AppFixture fixture) : IntegrationContext(fixture)
+public sealed class SoftDeleteTests(AppFixture fixture) : GivenFeedsExist(fixture)
 {
     [Fact]
     public async Task Soft_deleting_a_Text_Feed_should_succeed()
