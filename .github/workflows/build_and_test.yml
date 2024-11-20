@@ -34,7 +34,7 @@ jobs:
       run: docker-compose -f Feed/docker-compose.yml up -d
  
     - name: Run tests
-      run: dotnet test Feed.IntegrationTests/Feed.IntegrationTests.csproj --no-build --verbosity normal --logger "trx;LogFileName=xtests.trx"
+      run: dotnet test Feed/Feed.IntegrationTests/Feed.IntegrationTests.csproj --no-build --verbosity normal --logger "trx;LogFileName=xtests.trx"
  
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2      
