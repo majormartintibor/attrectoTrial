@@ -30,6 +30,10 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
+    - name: Install EF Core Tools
+      run: dotnet tool install --global dotnet-ef
+    - name: Add EF Tools to PATH
+      run: echo "::add-path::$(dotnet --list-tools | grep dotnet-ef | awk '{print $2}')"
     - name: Start containers
       run: docker-compose -f Feed/docker-compose.yml up -d
     - name: Apply EF Core Migrations
