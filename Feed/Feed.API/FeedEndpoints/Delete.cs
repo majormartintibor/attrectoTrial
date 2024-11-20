@@ -32,9 +32,7 @@ public static class Delete
         {
             SoftDeleteFeed softDeleteFeed = new();
 
-            await bus.InvokeAsync(softDeleteFeed);
-
-            //HATEOAS to be truly restful
+            await bus.InvokeAsync(softDeleteFeed);            
 
             return TypedResults.Ok();
 

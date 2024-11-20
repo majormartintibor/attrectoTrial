@@ -5,13 +5,17 @@ using static Feed.Core.FeedDomain.FeedCommand;
 
 namespace Feed.API.FeedEndpoints;
 
-public sealed record CreateFeedCommand()
+public sealed record CreateFeedCommand(
+    string Title,
+    string Description)
 {
     public sealed class CreateFeedCommandValidator : AbstractValidator<CreateFeedCommand>
     {
         public CreateFeedCommandValidator()
         {
             RuleFor(x => x).NotNull();
+            RuleFor(x => x.Title).MinimumLength(5);
+            RuleFor(x => x.Description).MaximumLength(2000);
         }
     }
 }
@@ -29,9 +33,7 @@ public static class Create
         {
             UpdateFeed createFeed = new();
 
-            var feedId = await bus.InvokeAsync<Guid>(createFeed);
-
-            //HATEOAS to be truly restful
+            var feedId = await bus.InvokeAsync<Guid>(createFeed);            
 
             return TypedResults.Created("/feed", feedId);
             

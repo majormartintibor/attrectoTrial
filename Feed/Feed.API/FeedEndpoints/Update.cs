@@ -29,9 +29,7 @@ public static class Update
         {
             UpdateFeed updateFeed = new();
 
-            await bus.InvokeAsync(updateFeed);
-
-            //HATEOAS to be truly restful
+            await bus.InvokeAsync(updateFeed);            
 
             return TypedResults.Ok();
 
