@@ -23,9 +23,9 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore Feed.sln
+      run: dotnet restore Feed/Feed.sln
     - name: Build
-      run: dotnet build Feed.sln --no-restore
+      run: dotnet build Feed/Feed.sln --no-restore
     - name: Start containers
       run: docker-compose up -d
  
@@ -36,7 +36,7 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2      
       if: always()
       with:
-        trx_files: "/home/runner/work/attrectoTrial/Feed/Feed.IntegrationTests/TestResults/xtests.trx"      
+        trx_files: "/home/runner/work/attrectoTrial/attrectoTrial/Feed.IntegrationTests/TestResults/xtests.trx"      
  
     - name: Stop containers
       if: always()
