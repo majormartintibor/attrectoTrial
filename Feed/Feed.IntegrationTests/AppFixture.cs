@@ -29,7 +29,7 @@ public sealed class AppFixture : IAsyncLifetime
                 //just hinting at potential usage of message broker like RabbitMQ
                 services.DisableAllExternalWolverineTransports();
 
-                //Initialize Databse here with BaselineData
+                //Initialize Database here with BaselineData
             });
         }
         // not yet needed, but we will use it!

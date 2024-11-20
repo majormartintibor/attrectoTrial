@@ -1,4 +1,6 @@
 ﻿using Alba;
+using Feed.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Wolverine.Tracking;
 
 namespace Feed.IntegrationTests;
@@ -10,20 +12,28 @@ public class IntegrationCollection : ICollectionFixture<AppFixture>
 }
 
 [Collection("integration")]
-public abstract class IntegrationContext : IAsyncLifetime
+public abstract class IntegrationContext(
+    AppFixture fixture) : IAsyncLifetime
 {
-    private readonly AppFixture _fixture;
-
-    protected IntegrationContext(AppFixture fixture)
-    {
-        _fixture = fixture;
-    }
+    private readonly AppFixture _fixture = fixture;
 
     public IAlbaHost Host => _fixture.Host;
 
     public virtual async Task InitializeAsync()
     {
-        
+        //This is a quick and dirty hack now, if I have time I will clean this up later
+        //if not, it is not the end of the world :)
+        using var context 
+            = CreateApplicationDbContext("Host=localhost;port=5432;Database=FeedDb;Username=postgres;Password=postgres;persist security info=true;");
+
+        //Delete all db sets here you want, can be used with LINQ.
+        //The goal is to reset the database to the initial state after
+        //BaseLinedata has been applied (not implemented yet)
+        await context.Feeds.ExecuteDeleteAsync();
+
+        //This is another option: it would delete and recreate the db
+        //context.Database.EnsureDeleted();
+        //context.Database.EnsureCreated();        
     }
 
     public Task DisposeAsync()
@@ -58,5 +68,13 @@ public abstract class IntegrationContext : IAsyncLifetime
         });
 
         return (tracked!, result!);
+    }
+
+    private static ApplicationDbContext CreateApplicationDbContext(string connectionstring)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        optionsBuilder.UseNpgsql(connectionstring);
+        optionsBuilder.EnableSensitiveDataLogging();
+        return new ApplicationDbContext(optionsBuilder.Options);
     }
 }
