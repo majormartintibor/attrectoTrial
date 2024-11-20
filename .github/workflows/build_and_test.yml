@@ -45,7 +45,7 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2      
       if: always()
       with:
-        trx_files: "/home/runner/work/attrectoTrial/attrectoTrial/Feed.IntegrationTests/TestResults/xtests.trx"      
+        trx_files: "/home/runner/work/attrectoTrial/attrectoTrial/Feed/Feed.IntegrationTests/TestResults/xtests.trx"      
  
     - name: Stop containers
       if: always()
