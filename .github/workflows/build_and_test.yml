@@ -32,7 +32,8 @@ jobs:
         sudo apt-get install -y docker-compose
     - name: Start containers
       run: docker-compose -f Feed/docker-compose.yml up -d
- 
+    - name: Apply EF Core Migrations
+      run: dotnet ef database update --project Feed/Feed.API/Feed.API.csproj
     - name: Run tests
       run: dotnet test Feed/Feed.IntegrationTests/Feed.IntegrationTests.csproj --no-build --verbosity normal --logger "trx;LogFileName=xtests.trx"
  
