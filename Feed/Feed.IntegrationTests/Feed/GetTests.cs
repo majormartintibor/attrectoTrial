@@ -4,7 +4,7 @@ using static Feed.API.FeedEndpoints.Get;
 
 namespace Feed.IntegrationTests.Feed;
 
-public sealed class GetTests(AppFixture fixture) : IntegrationContext(fixture)
+public sealed class GetTests(AppFixture fixture) : GivenFeedsExist(fixture)
 {
     [Fact]
     public async Task Querying_for_Text_Feed_by_id_returns_Text_Feed()
@@ -12,7 +12,7 @@ public sealed class GetTests(AppFixture fixture) : IntegrationContext(fixture)
         var scenario = await Host.Scenario(x =>
         {
             x.Get               
-                .Url(GetEndpoint + BaselineData.DefaultTextFeedId);
+                .Url(GetEndpoint + InitialTextFeed.Id);
 
             x.StatusCodeShouldBeOk();
         });       
@@ -24,7 +24,7 @@ public sealed class GetTests(AppFixture fixture) : IntegrationContext(fixture)
         var scenario = await Host.Scenario(x =>
         {
             x.Get
-                .Url(GetEndpoint + BaselineData.DefaultImageFeedId);
+                .Url(GetEndpoint + InitialImageFeed.Id);
 
             x.StatusCodeShouldBeOk();
         });
@@ -36,7 +36,7 @@ public sealed class GetTests(AppFixture fixture) : IntegrationContext(fixture)
         var scenario = await Host.Scenario(x =>
         {
             x.Get                
-                .Url(GetEndpoint + BaselineData.DefaultVideoFeedId);
+                .Url(GetEndpoint + InitialVideoFeed.Id);
 
             x.StatusCodeShouldBeOk();
         });

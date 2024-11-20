@@ -15,5 +15,19 @@ internal sealed class FeedConfiguration : IEntityTypeConfiguration<Entity.Feed>
 
         builder.Property(f => f.VideoUrl)
                 .IsRequired(false);
+
+        Seed(builder);
+    }
+
+    //Seeding the database with Feeds
+    private static void Seed(EntityTypeBuilder<Entity.Feed> builder)
+    {        
+        builder.HasData
+        (
+            //new Entity.Feed()
+            //{
+
+            //}
+        );
     }
 }
