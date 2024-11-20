@@ -39,7 +39,17 @@ a TestContainer, I am able to test it end to end, from calling the HTTP endpoint
 You could argue this is end to end testing or blackbox testing or whatever. A discussion about the terminus/technicus doesn't really bring
 any business value. I prefer to use the term integration tests for this kind of setup.
 
-# Regarding REST (Representational State Transfer)
+I have came up with some validation rules and written a few tests for them. It is not meant to be complete, just a sample.
+
+# API design
+I plan to include API versioning with URL versioning.
+
+For the soft delete I have decided to use the HTTP verb PATCH and not DELETE. As it is partial update (setting the isDeleted boealan) and
+should be an idempotent operation PATCH seems a better fit. DELETE implies that the resource is permantently removed, which is not true here.
+
+Validation example can be found in the CreateTests class. 
+
+## Regarding REST (Representational State Transfer)
 
 REST is an architectural style described by Roy Fielding. It can be found in Chapter 5 in his PhD dissertation 
 "Architectural Styles and the Design of Network-based Software Architectures". 
