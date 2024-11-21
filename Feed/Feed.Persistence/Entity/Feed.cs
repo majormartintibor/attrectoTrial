@@ -5,7 +5,7 @@ public sealed class Feed
 {
     public Feed()
     {
-        
+        UserFeedLikes = [];
     }
 
     public Guid Id { get; set; }
@@ -16,4 +16,5 @@ public sealed class Feed
     public string VideoUrl { get; set; } = string.Empty;
     public FeedType FeedType { get; set; }
     public bool IsDeleted { get; set; }
+    public ICollection<UserFeedLike> UserFeedLikes { get; set; }
 }

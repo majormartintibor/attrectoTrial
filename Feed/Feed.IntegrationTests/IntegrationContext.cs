@@ -29,7 +29,9 @@ public abstract class IntegrationContext(
         //Delete all db sets here you want, can be used with LINQ.
         //The goal is to reset the database to the initial state after
         //BaseLinedata has been applied (not implemented yet)
+        await context.UserFeedLikes.ExecuteDeleteAsync();
         await context.Feeds.ExecuteDeleteAsync();
+        await context.Users.ExecuteDeleteAsync();
 
         //This is another option: it would delete and recreate the db
         //context.Database.EnsureDeleted();
