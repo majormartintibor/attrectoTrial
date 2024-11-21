@@ -22,7 +22,7 @@ public static class Get
 {
     public const string GetEndpoint = "/api/feed/";
 
-    [WolverineGet(GetEndpoint + "{id:guid}", RouteName = "Fasz")]
+    [WolverineGet(GetEndpoint + "{id:guid}")]
     public static async Task<IResult> GetAsync(
         [FromRoute] Guid id,
         IMessageBus bus,
