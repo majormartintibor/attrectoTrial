@@ -36,10 +36,9 @@ Generally I am not a fan of wrapping DbContext with the repository pattern, but 
 # Testing
 
 ## Unit Tests
-I am not a fan of bloated unit test projects. I think a lot of testing belongs to the integration test level. This application doesn't have
-any invariants that you want to encapsulate in the Core layer and would be good candidates for classic unit testing. This application is
-more about wether the simple processes can run end to end and this I rather moved testing to the Integration Test project rather than going
-down the mocking path which I am not a fan of.
+This application doesn't have any invariants that you want to encapsulate in the Core layer and would be good candidates 
+for classic unit testing. This application is more about checking if the simple processes can run end to end and 
+I rather moved testing to the Integration Test project than going down the mocking path which I am not a fan of.
 
 ## Integration Tests
 I personally prefer to use integration tests with docker whenever possible and try to keep mocking to an absolute minimum.
@@ -72,6 +71,13 @@ REST is an architectural style described by Roy Fielding. It can be found in Cha
 Part of REST as described by Fielding is HATEAOS aka "Hypertext as the engine of application state" which is a fundamental concept of 
 REST that ensures a client interacts with a RESTful service through dynamic hyperlinks provided in responses. I have implemented a very
 simple example of it. I wish our industry would use HATEAOS more.
+
+# Docker, Github actions
+
+I've made a github action that runs whenever I push changes to the main branch. It builds the application and runs docker-compose up
+then runs all Integration tests and publishes the test results.
+I've created another docker-compose file for local testing with docker and two appsettings files to show that I can fully support
+staging.
 
 # Additional Notes
 
