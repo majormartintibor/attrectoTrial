@@ -1,5 +1,6 @@
 ﻿using Alba;
 using Feed.API.FeedEndpoints;
+using Shouldly;
 using static Feed.API.FeedEndpoints.List;
 
 namespace Feed.IntegrationTests.Feed;
@@ -16,5 +17,8 @@ public sealed class ListTests(AppFixture fixture) : IntegrationContext(fixture)
 
             x.StatusCodeShouldBeOk();
         });
+
+        var response = scenario.ReadAsJson<List<FeedDto>>();
+        response.Count.ShouldBeGreaterThan(0);
     }  
 }

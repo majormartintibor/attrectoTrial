@@ -39,8 +39,11 @@ public static class SeedData
         { "Like5", (UserGuids["User3"], FeedGuids["Feed5"]) },
         { "Like6", (UserGuids["User3"], FeedGuids["Feed6"]) },
         { "Like7", (UserGuids["User1"], FeedGuids["Feed7"]) },
-        { "Like8", (UserGuids["User2"], FeedGuids["Feed8"]) },
-        { "Like9", (UserGuids["User3"], FeedGuids["Feed9"]) }
+        { "Like8", (UserGuids["User1"], FeedGuids["Feed8"]) },
+        { "Like9", (UserGuids["User2"], FeedGuids["Feed8"]) },
+        { "Like10", (UserGuids["User1"], FeedGuids["Feed9"]) },
+        { "Like11", (UserGuids["User2"], FeedGuids["Feed9"]) },
+        { "Like12", (UserGuids["User3"], FeedGuids["Feed9"]) }
     };
 
     public static void Initialize(ApplicationDbContext context)

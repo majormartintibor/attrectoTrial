@@ -2,7 +2,6 @@
 
 namespace Feed.API.FeedEndpoints;
 
-//starting DTO draft
 public sealed record FeedDto
 {
     public Guid Id { get; set; }
@@ -13,4 +12,5 @@ public sealed record FeedDto
     public FeedType FeedType { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
     public string VideoUrl { get; set; } = string.Empty;
+    public int Likes { get; set; }
 }

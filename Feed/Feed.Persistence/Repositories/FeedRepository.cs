@@ -112,6 +112,7 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
                 feed.Title,
                 feed.Description,
                 feed.FeedType,
+                feed.UserFeedLikes.Count,
                 feed.ImageUrl,
                 feed.VideoUrl
             );
@@ -121,7 +122,12 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        return [];
+        return await context.Feeds
+            .AsNoTracking()
+            .Where(f => !f.IsDeleted)
+            .Include(f => f.UserFeedLikes)
+            .Select(f => MapFromPersistenceModel(f))
+            .ToListAsync();        
     }
 
     public async Task UpdateFeedAsync(Core.FeedDomain.Feed feed)

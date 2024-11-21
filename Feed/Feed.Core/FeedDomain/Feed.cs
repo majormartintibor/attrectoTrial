@@ -21,14 +21,16 @@ public abstract record Feed
         string Title,
         string Description,
         FeedType FeedType,
+        int Likes,
         string ImageUrl = "",
-        string VideoUrl = "")
+        string VideoUrl = ""
+        )
     {
         return FeedType switch
         {
-            FeedType.Text => TextFeed.CreateTextFeed(Id, UserId, Title, Description),
-            FeedType.Image => ImageFeed.CreateImageFeed(Id, UserId, Title, Description, ImageUrl),
-            FeedType.Video => VideoFeed.CreateVideoFeed(Id, UserId, Title, Description, ImageUrl, VideoUrl),
+            FeedType.Text => TextFeed.CreateTextFeed(Id, UserId, Title, Description, Likes),
+            FeedType.Image => ImageFeed.CreateImageFeed(Id, UserId, Title, Description, ImageUrl, Likes),
+            FeedType.Video => VideoFeed.CreateVideoFeed(Id, UserId, Title, Description, ImageUrl, VideoUrl, Likes),
             _ => throw new InvalidEnumArgumentException()
         };
     }
@@ -37,11 +39,12 @@ public abstract record Feed
     {
         private TextFeed() { }
 
-        public static TextFeed CreateTextFeed(
+        internal static TextFeed CreateTextFeed(
             Guid Id,
             Guid UserId,
             string Title,
-            string Description)
+            string Description,
+            int Likes)
         {
             return new TextFeed() with 
             { 
@@ -49,7 +52,8 @@ public abstract record Feed
                 UserId = UserId,
                 Title = Title,
                 Description = Description,
-                FeedType = FeedType.Text
+                FeedType = FeedType.Text,
+                Likes = Likes
             };
         }
     }
@@ -60,12 +64,13 @@ public abstract record Feed
 
         private ImageFeed() { }
 
-        public static ImageFeed CreateImageFeed(
+        internal static ImageFeed CreateImageFeed(
             Guid Id,
             Guid UserId,
             string Title,
             string Description,            
-            string ImageUrl)
+            string ImageUrl,
+            int Likes)
         {
             return new ImageFeed() with
             {
@@ -74,7 +79,8 @@ public abstract record Feed
                 Title = Title,
                 Description = Description,
                 ImageUrl = ImageUrl,
-                FeedType= FeedType.Image
+                FeedType= FeedType.Image,
+                Likes = Likes
             };
         }
     }
@@ -86,13 +92,14 @@ public abstract record Feed
 
         private VideoFeed() { }
 
-        public static VideoFeed CreateVideoFeed(
+        internal static VideoFeed CreateVideoFeed(
             Guid Id,
             Guid UserId,
             string Title,
             string Description,            
             string ImageUrl,
-            string VideoUrl)
+            string VideoUrl,
+            int Likes)
         {
             return new VideoFeed() with
             {
@@ -102,7 +109,8 @@ public abstract record Feed
                 Description = Description,
                 ImageUrl = ImageUrl,
                 VideoUrl = VideoUrl,
-                FeedType = FeedType.Video
+                FeedType = FeedType.Video,
+                Likes = Likes
             };
         }
     }
@@ -140,6 +148,7 @@ public static class CreateFeedHandler
             command.Title,
             command.Description,
             command.FeedType,
+            0,
             command.ImageUrl,
             command.VideoUrl);
 
@@ -191,10 +200,10 @@ public static class GetFeedHandler
 
 public static class ListFeedsHandler
 {
-    public static async Task Handle(
+    public static async Task<List<Feed>> Handle(
         ListFeeds query,
         IFeedRepository feedRepository)
     {
-        await Task.CompletedTask;
+        return await feedRepository.GetFeedsAsync();
     }
 }

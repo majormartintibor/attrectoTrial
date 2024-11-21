@@ -26,28 +26,33 @@ public abstract class IntegrationContext(
         using var context
             = CreateApplicationDbContext("Host=localhost;port=5432;Database=FeedDb;Username=postgres;Password=postgres;persist security info=true;");
 
+        //to do full reset
+        await context.UserFeedLikes.ExecuteDeleteAsync();
+        await context.Feeds.ExecuteDeleteAsync();
+        await context.Users.ExecuteDeleteAsync();
+
         // Clear existing data except seed data
-        context.UserFeedLikes
-            .AsEnumerable()
-            .Where(ufl => !SeedData.UserFeedLikeGuids.Values
-            .Any(seed => seed.UserId == ufl.UserId && seed.FeedId == ufl.FeedId))
-            .ToList()
-            .ForEach(ufl => context.UserFeedLikes.Remove(ufl));
-        await context.SaveChangesAsync();
+        //context.UserFeedLikes
+        //    .AsEnumerable()
+        //    .Where(ufl => !SeedData.UserFeedLikeGuids.Values
+        //    .Any(seed => seed.UserId == ufl.UserId && seed.FeedId == ufl.FeedId))
+        //    .ToList()
+        //    .ForEach(ufl => context.UserFeedLikes.Remove(ufl));
+        //await context.SaveChangesAsync();
 
-        context.Feeds
-            .AsEnumerable()
-            .Where(f => !SeedData.FeedGuids.ContainsValue(f.Id))
-            .ToList()
-            .ForEach(f => context.Feeds.Remove(f));
-        await context.SaveChangesAsync();
+        //context.Feeds
+        //    .AsEnumerable()
+        //    .Where(f => !SeedData.FeedGuids.ContainsValue(f.Id))
+        //    .ToList()
+        //    .ForEach(f => context.Feeds.Remove(f));
+        //await context.SaveChangesAsync();
 
-        context.Users
-            .AsEnumerable()
-            .Where(u => !SeedData.UserGuids.ContainsValue(u.Id))
-            .ToList()
-            .ForEach(u => context.Users.Remove(u));
-        await context.SaveChangesAsync();
+        //context.Users
+        //    .AsEnumerable()
+        //    .Where(u => !SeedData.UserGuids.ContainsValue(u.Id))
+        //    .ToList()
+        //    .ForEach(u => context.Users.Remove(u));
+        //await context.SaveChangesAsync();
 
         //reseed the database to initial baseline state
         //if data exists returns without doing anything

@@ -29,9 +29,11 @@ public static class List
         {
             ListFeeds listFeeds = new();
 
-            await bus.InvokeAsync(listFeeds);            
+            var feeds = await bus.InvokeAsync<List<Core.FeedDomain.Feed>>(listFeeds);            
 
-            return TypedResults.Ok();
+            var feedList = feeds.Select(Mappers.MapFromDomainModel).ToList();
+
+            return TypedResults.Ok(feedList);
 
         }
         catch (Exception ex)
