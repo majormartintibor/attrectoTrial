@@ -14,7 +14,7 @@ public sealed class SoftDeleteTests(AppFixture fixture) : GivenFeedsExist(fixtur
         {
             x.Patch
                 .Json(new DeleteFeedCommand())
-                .ToUrl(DeleteEndpoint + BaselineData.DefaultTextFeedId);
+                .ToUrl(DeleteEndpoint + Guid.NewGuid());
 
             x.StatusCodeShouldBeOk();
         });
@@ -27,7 +27,7 @@ public sealed class SoftDeleteTests(AppFixture fixture) : GivenFeedsExist(fixtur
         {
             x.Patch
                 .Json(new DeleteFeedCommand())
-                .ToUrl(DeleteEndpoint + BaselineData.DefaultImageFeedId);
+                .ToUrl(DeleteEndpoint + Guid.NewGuid());
 
             x.StatusCodeShouldBeOk();
         });
@@ -40,7 +40,7 @@ public sealed class SoftDeleteTests(AppFixture fixture) : GivenFeedsExist(fixtur
         {
             x.Patch
                 .Json(new DeleteFeedCommand())
-                .ToUrl(DeleteEndpoint + BaselineData.DefaultVideoFeedId);
+                .ToUrl(DeleteEndpoint + Guid.NewGuid());
 
             x.StatusCodeShouldBeOk();
         });

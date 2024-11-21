@@ -17,19 +17,6 @@ internal sealed class UserFeedLikeConfiguration : IEntityTypeConfiguration<UserF
 
         builder.HasOne(uf => uf.Feed)
             .WithMany(f => f.UserFeedLikes)
-            .HasForeignKey(uf => uf.FeedId);
-
-        Seed(builder);
-    }
-
-    private static void Seed(EntityTypeBuilder<UserFeedLike> builder)
-    {
-        builder.HasData
-        (
-        //new UserFeedLike()
-        //{
-
-        //}
-        );
-    }
+            .HasForeignKey(uf => uf.FeedId);        
+    }    
 }

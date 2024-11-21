@@ -1,3 +1,4 @@
+using Feed.API;
 using Feed.Core;
 using Feed.Persistence;
 using Oakton;
@@ -7,7 +8,6 @@ using Wolverine.Http;
 using Wolverine.Http.FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 //Setup to use multiple apsettings based om env variable
 builder.Configuration
@@ -22,8 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddWolverineHttp();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
-builder.Services.UsePersistence(connectionString);
+builder.Services.UsePersistence(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
@@ -64,6 +63,11 @@ app.MapWolverineEndpoints(opts =>
 });
 
 app.UseHttpsRedirection();
+
+if (app.Environment.IsDevelopment())
+{
+    app.SeedDatabase();
+}
 
 return await app.RunOaktonCommands(args);
 

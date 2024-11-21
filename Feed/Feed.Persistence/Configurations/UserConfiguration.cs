@@ -9,19 +9,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
 
-        builder.HasKey(e => e.Id);
-
-        Seed(builder);
-    }
-
-    private static void Seed(EntityTypeBuilder<User> builder)
-    {
-        builder.HasData
-        (
-        //new User()
-        //{
-
-        //}
-        );
-    }
+        builder.HasKey(e => e.Id);       
+    }    
 }

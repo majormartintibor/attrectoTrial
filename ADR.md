@@ -36,7 +36,10 @@ Generally I am not a fan of wrapping DbContext with the repository pattern, but 
 # Testing
 
 ## Unit Tests
-I am not a fan of bloated unit test projects. I think a lot of testing belongs to the integration test level.
+I am not a fan of bloated unit test projects. I think a lot of testing belongs to the integration test level. This application doesn't have
+any invariants that you want to encapsulate in the Core layer and would be good candidates for classic unit testing. This application is
+more about wether the simple processes can run end to end and this I rather moved testing to the Integration Test project rather than going
+down the mocking path which I am not a fan of.
 
 ## Integration Tests
 I personally prefer to use integration tests with docker whenever possible and try to keep mocking to an absolute minimum.
@@ -83,4 +86,20 @@ of using OSS, there is a certain risk associated with it.
 
 ## Options pattern
 
-I know about it, probably did not have enough time
+I know about it, probably did not have enough time.
+
+# Regarding missing features
+
+## UI
+I simply do not have the time. However a few notes on how I would do it:
+I would use Blazor WASM to build the UI using the MudBlazor component library. First of all I do have experience with it, I have built
+a website with this stack before. MudBlazor is simple to use OSS solution which enables me to build a decently looking UI. I would
+choose Blazor, because I can relly on my C# knowledge instead of having to bother with javascript.
+Some things I would consider when also building a UI:
+- Add cancelation tokens (on the back end as well)
+- Use something like Polly for resiliency (retry mechanism)
+
+## Authentication / Authorization
+Again, lack of time. I have implemented such feature with Microsoft EntraID, Azure AD B2C and AuthO by Okta.
+I have a public github repo where you can take a look at AuthO by Okta implementation:
+github.com/MajorMartinDev/CamabrS

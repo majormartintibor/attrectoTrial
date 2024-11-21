@@ -18,4 +18,9 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserFeedLikeConfiguration());
     }
+
+    public void Seed()
+    {
+        SeedData.Initialize(this);
+    }
 }

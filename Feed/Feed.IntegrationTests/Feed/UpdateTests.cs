@@ -13,7 +13,7 @@ public sealed class UpdateTests(AppFixture fixture) : GivenFeedsExist(fixture)
         {
             x.Put
                 .Json(new UpdateFeedCommand())
-                .ToUrl(UpdateEndpoint + BaselineData.DefaultTextFeedId);
+                .ToUrl(UpdateEndpoint + Guid.NewGuid());
 
             x.StatusCodeShouldBeOk();
         });        
@@ -26,7 +26,7 @@ public sealed class UpdateTests(AppFixture fixture) : GivenFeedsExist(fixture)
         {
             x.Put
                 .Json(new UpdateFeedCommand())
-                .ToUrl(UpdateEndpoint + BaselineData.DefaultImageFeedId);
+                .ToUrl(UpdateEndpoint + Guid.NewGuid());
 
             x.StatusCodeShouldBeOk();
         });
@@ -39,7 +39,7 @@ public sealed class UpdateTests(AppFixture fixture) : GivenFeedsExist(fixture)
         {
             x.Put
                 .Json(new UpdateFeedCommand())
-                .ToUrl(UpdateEndpoint + BaselineData.DefaultVideoFeedId);
+                .ToUrl(UpdateEndpoint + Guid.NewGuid());
 
             x.StatusCodeShouldBeOk();
         });

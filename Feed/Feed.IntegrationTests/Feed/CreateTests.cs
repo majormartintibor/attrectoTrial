@@ -16,6 +16,7 @@ public sealed class CreateTests(AppFixture fixture) : IntegrationContext(fixture
     private static readonly string validTitle = faker.Random.String2(10);
     private static readonly string validDescription = faker.Random.String2(1000);
     private static readonly string invalidTitle = faker.Random.String2(1);
+    private static readonly string invalidTitleToolong = faker.Random.String2(1000);
     private static readonly string invalidDescription = faker.Random.String2(3000);    
     private static readonly Guid userId = Guid.NewGuid();
     private static readonly string imageUrl = internet.Url();
@@ -202,6 +203,25 @@ public sealed class CreateTests(AppFixture fixture) : IntegrationContext(fixture
             x.StatusCodeShouldBe(StatusCodes.Status400BadRequest);
         });
         
+
+    }
+
+    [Fact]
+    public async Task Too_long_title_returns_validation_error()
+    {
+        var scenario = await Host.Scenario(x =>
+        {
+            x.Post
+                .Json(new CreateFeedCommand(
+                    userId,
+                    invalidTitleToolong,
+                    validDescription,
+                    FeedType.Text))
+                .ToUrl(CreateEndpoint);
+
+            x.StatusCodeShouldBe(StatusCodes.Status400BadRequest);
+        });
+
 
     }
 

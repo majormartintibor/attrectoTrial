@@ -1,5 +1,5 @@
 ﻿using Alba;
-using Alba.Security;
+//using Alba.Security;
 using Oakton;
 using Wolverine;
 
@@ -27,9 +27,7 @@ public sealed class AppFixture : IAsyncLifetime
             x.ConfigureServices(services =>
             {
                 //just hinting at potential usage of message broker like RabbitMQ
-                services.DisableAllExternalWolverineTransports();
-
-                //Initialize Database here with BaselineData
+                services.DisableAllExternalWolverineTransports();                
             });
         }
         // not yet needed, but we will use it!

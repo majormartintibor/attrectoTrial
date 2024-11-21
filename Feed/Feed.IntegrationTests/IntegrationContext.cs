@@ -25,13 +25,24 @@ public abstract class IntegrationContext(
         //if not, it is not the end of the world :)
         using var context 
             = CreateApplicationDbContext("Host=localhost;port=5432;Database=FeedDb;Username=postgres;Password=postgres;persist security info=true;");
+                
+        // Clear existing data except seed data
+        await context.UserFeedLikes
+            .Where(ufl => !SeedData.UserFeedLikeGuids.Values
+                .Any(seed => seed.UserId == ufl.UserId && seed.FeedId == ufl.FeedId))
+            .ExecuteDeleteAsync();
 
-        //Delete all db sets here you want, can be used with LINQ.
-        //The goal is to reset the database to the initial state after
-        //BaseLinedata has been applied (not implemented yet)
-        await context.UserFeedLikes.ExecuteDeleteAsync();
-        await context.Feeds.ExecuteDeleteAsync();
-        await context.Users.ExecuteDeleteAsync();
+        await context.Feeds
+            .Where(f => !SeedData.FeedGuids.Values.Contains(f.Id))
+            .ExecuteDeleteAsync();
+
+        await context.Users
+            .Where(u => !SeedData.UserGuids.Values.Contains(u.Id))
+            .ExecuteDeleteAsync();
+
+        //reseed the database to initial baseline state
+        //if data exists returns without doing anything
+        context.Seed();
 
         //This is another option: it would delete and recreate the db
         //context.Database.EnsureDeleted();
