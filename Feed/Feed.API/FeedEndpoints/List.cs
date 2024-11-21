@@ -23,8 +23,10 @@ public static class List
 
     [WolverineGet(ListEndpoint)]
     public static async Task<IResult> ListAsync(
-        ListFeedQuery query,
-        IMessageBus bus)
+        ListFeedQuery query,        
+        IMessageBus bus,
+        LinkGenerator linkGenerator,
+        HttpContext context)
     {
         try
         {
@@ -32,7 +34,12 @@ public static class List
 
             var feeds = await bus.InvokeAsync<List<Core.FeedDomain.Feed>>(listFeeds);            
 
-            var feedList = feeds.Select(Mappers.MapFromDomainModel).ToList();
+            //Isn't this kind of Functional Programming approach with method chaining
+            //and immutable data just beautiful? :) 
+            var feedList = feeds
+                .Select(Mappers.MapFromDomainModel)
+                .Select(f => HATEOAS.AddLinks(f, linkGenerator, context))
+                .ToList();
 
             return TypedResults.Ok(feedList);
 
@@ -41,5 +48,5 @@ public static class List
         {
             return TypedResults.BadRequest(ex);
         }
-    }
+    }    
 }

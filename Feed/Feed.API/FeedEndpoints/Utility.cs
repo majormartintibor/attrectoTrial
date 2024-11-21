@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Feed.API.FeedEndpoints;
 
-public static class Mappers
+internal static class Mappers
 {
     internal static FeedDto MapFromDomainModel(Core.FeedDomain.Feed fetchedFeed)
     {
@@ -71,5 +71,21 @@ public static class Mappers
                 feedDto.ImageUrl,
                 feedDto.VideoUrl
             );
+    }
+}
+
+internal static class HATEOAS
+{
+    internal static FeedDto AddLinks(FeedDto feed, LinkGenerator linkGenerator, HttpContext context)
+    {
+        return feed with
+        {
+            Links = [
+                    new LinkDto("self", linkGenerator.GetUriByName(context, "GET_api_feed_id", new{feed.Id}) ?? string.Empty, "GET"),
+                    new LinkDto("list", linkGenerator.GetUriByName(context, "GET_api_feed", []) ?? string.Empty, "GET"),
+                    new LinkDto("update", linkGenerator.GetUriByName(context, "PUT_api_feed_id", new{feed.Id}) ?? string.Empty, "PUT"),
+                    new LinkDto("delete", linkGenerator.GetUriByName(context, "PATCH_api_feed_id", new{feed.Id}) ?? string.Empty, "PATCH"),
+                ]
+        };
     }
 }

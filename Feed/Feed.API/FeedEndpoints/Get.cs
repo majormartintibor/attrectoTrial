@@ -21,22 +21,12 @@ public static class Get
         try
         {
             FeedCommand.GetFeed getFeed = new(id);
-
-            //HATEOAS to be truly restful
-            List<LinkDto> links = [
-                    new LinkDto("self", linkGenerator.GetUriByName(context, "GET_api_feed_id", new{id}) ?? string.Empty, "GET"),
-                    new LinkDto("list", linkGenerator.GetUriByName(context, "GET_api_feed", []) ?? string.Empty, "GET"),
-                    new LinkDto("update", linkGenerator.GetUriByName(context, "PUT_api_feed_id", new{id}) ?? string.Empty, "PUT"),
-                    new LinkDto("delete", linkGenerator.GetUriByName(context, "PATCH_api_feed_id", new{id}) ?? string.Empty, "PATCH"),
-                ];
-
             var fetchedFeed = await bus.InvokeAsync<Core.FeedDomain.Feed>(getFeed);
 
-            FeedDto feed = Mappers.MapFromDomainModel(fetchedFeed);
-            feed.Links = links;
+            FeedDto feed = HATEOAS.AddLinks(
+                Mappers.MapFromDomainModel(fetchedFeed), linkGenerator, context);
 
             return TypedResults.Ok(feed);
-
         }
         catch (FeedNotFoundException ex)
         {
