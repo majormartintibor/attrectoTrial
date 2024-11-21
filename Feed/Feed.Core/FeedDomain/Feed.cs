@@ -184,7 +184,7 @@ public static class HardDeleteFeedHandler
         HardDeleteFeed command,
         IFeedRepository feedRepository)
     {
-        await Task.CompletedTask;
+        await feedRepository.HardDeleteFeedAsync(command.FeedId);
     }
 }
 

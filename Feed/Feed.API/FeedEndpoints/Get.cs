@@ -1,22 +1,10 @@
-﻿using static Feed.Core.FeedDomain.FeedCommand;
-using Wolverine.Http;
+﻿using Wolverine.Http;
 using Wolverine;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Feed.Core.Exceptions;
+using Feed.Core.FeedDomain;
 
 namespace Feed.API.FeedEndpoints;
-
-public sealed record GetFeedQuery(Guid Id)
-{
-    public sealed class GetFeedQueryValidator : AbstractValidator<GetFeedQuery>
-    {
-        public GetFeedQueryValidator()
-        {
-            RuleFor(x => x).NotNull();
-        }
-    }
-}
 
 public static class Get
 {
@@ -32,7 +20,7 @@ public static class Get
     {
         try
         {
-            GetFeed getFeed = new(id);
+            FeedCommand.GetFeed getFeed = new(id);
 
             //HATEOAS to be truly restful
             List<LinkDto> links = [

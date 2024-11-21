@@ -1,10 +1,10 @@
-﻿using static Feed.Core.FeedDomain.FeedCommand;
-using Wolverine.Http;
+﻿using Wolverine.Http;
 using Wolverine;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Feed.Core.Exceptions;
 using Wolverine.Attributes;
+using Feed.Core.FeedDomain;
 
 namespace Feed.API.FeedEndpoints;
 
@@ -43,7 +43,7 @@ public static class Delete
             };
         }
 
-        var feed = await bus.InvokeAsync<Core.FeedDomain.Feed>(new GetFeed(Guid.Parse(id!.ToString()!)));
+        var feed = await bus.InvokeAsync<Core.FeedDomain.Feed>(new FeedCommand.GetFeed(Guid.Parse(id!.ToString()!)));
 
         return feed.UserId == command.UserId ? WolverineContinue.NoProblems :
             new ProblemDetails
@@ -64,7 +64,7 @@ public static class Delete
     {
         try
         {
-            SoftDeleteFeed softDeleteFeed = new(id);
+            FeedCommand.SoftDeleteFeed softDeleteFeed = new(id);
 
             await bus.InvokeAsync(softDeleteFeed);            
 

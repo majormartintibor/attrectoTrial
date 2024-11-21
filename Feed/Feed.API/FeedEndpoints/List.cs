@@ -1,10 +1,11 @@
-﻿using static Feed.Core.FeedDomain.FeedCommand;
-using Wolverine.Http;
+﻿using Wolverine.Http;
 using Wolverine;
 using FluentValidation;
+using Feed.Core.FeedDomain;
 
 namespace Feed.API.FeedEndpoints;
 
+//Could contain filter parameters
 public sealed record ListFeedQuery()
 {
     public sealed class ListFeedQueryValidator : AbstractValidator<ListFeedQuery>
@@ -27,7 +28,7 @@ public static class List
     {
         try
         {
-            ListFeeds listFeeds = new();
+            FeedCommand.ListFeeds listFeeds = new();
 
             var feeds = await bus.InvokeAsync<List<Core.FeedDomain.Feed>>(listFeeds);            
 

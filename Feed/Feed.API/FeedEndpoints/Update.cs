@@ -1,9 +1,9 @@
-﻿using static Feed.Core.FeedDomain.FeedCommand;
-using Wolverine.Http;
+﻿using Wolverine.Http;
 using Wolverine;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Wolverine.Attributes;
+using Feed.Core.FeedDomain;
 
 namespace Feed.API.FeedEndpoints;
 
@@ -43,7 +43,7 @@ public static class Update
             };
         }
 
-        var feed = await bus.InvokeAsync<Core.FeedDomain.Feed>(new GetFeed(Guid.Parse(id!.ToString()!)));
+        var feed = await bus.InvokeAsync<Core.FeedDomain.Feed>(new FeedCommand.GetFeed(Guid.Parse(id!.ToString()!)));
 
         return feed.UserId == command.Feed.UserId ? WolverineContinue.NoProblems :
             new ProblemDetails
@@ -60,7 +60,7 @@ public static class Update
     {
         try
         {
-            UpdateFeed updateFeed = new(Mappers.MapToDomainModel(command.Feed));
+            FeedCommand.UpdateFeed updateFeed = new(Mappers.MapToDomainModel(command.Feed));
 
             await bus.InvokeAsync(updateFeed);            
 

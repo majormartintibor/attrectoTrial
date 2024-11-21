@@ -2,7 +2,6 @@
 using FluentValidation;
 using Wolverine;
 using Wolverine.Http;
-using static Feed.Core.FeedDomain.FeedCommand;
 
 namespace Feed.API.FeedEndpoints;
 
@@ -41,7 +40,7 @@ public static class Create
     {
         try
         {
-            CreateFeed createFeed = new(
+            FeedCommand.CreateFeed createFeed = new(
                 command.UserId, 
                 command.Title, 
                 command.Description,
