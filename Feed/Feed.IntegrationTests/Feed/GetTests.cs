@@ -1,5 +1,6 @@
 ﻿using Alba;
 using Feed.IntegrationTests.Feed.Fixtures;
+using Microsoft.AspNetCore.Http;
 using static Feed.API.FeedEndpoints.Get;
 
 namespace Feed.IntegrationTests.Feed;
@@ -39,6 +40,18 @@ public sealed class GetTests(AppFixture fixture) : GivenFeedsExist(fixture)
                 .Url(GetEndpoint + InitialVideoFeed.Id);
 
             x.StatusCodeShouldBeOk();
+        });
+    }
+
+    [Fact]
+    public async Task Querying_for_a_non_existing_feed_returns_not_found()
+    {
+        var scenario = await Host.Scenario(x =>
+        {
+            x.Get
+                .Url(GetEndpoint + Guid.NewGuid());
+
+            x.StatusCodeShouldBe(StatusCodes.Status404NotFound);
         });
     }
 }
