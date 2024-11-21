@@ -125,9 +125,9 @@ public abstract record FeedCommand
         FeedType FeedType,
         string ImageUrl = "",
         string VideoUrl = "");
-    public sealed record UpdateFeed();
+    public sealed record UpdateFeed(Feed Feed);
     public sealed record SoftDeleteFeed(Guid FeedId);
-    public sealed record HardDeleteFeed();
+    public sealed record HardDeleteFeed(Guid FeedId);
     public sealed record GetFeed(Guid FeedId);
     public sealed record ListFeeds();
 }
@@ -164,7 +164,7 @@ public static class UpdateFeedHandler
         UpdateFeed command,
         IFeedRepository feedRepository)
     {
-        await Task.CompletedTask;
+        await feedRepository.UpdateFeedAsync(command.Feed);
     }
 }
 

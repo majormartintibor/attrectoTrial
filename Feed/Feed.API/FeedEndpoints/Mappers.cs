@@ -6,7 +6,7 @@ namespace Feed.API.FeedEndpoints;
 
 public static class Mappers
 {
-    public static FeedDto MapFromDomainModel(Core.FeedDomain.Feed fetchedFeed)
+    internal static FeedDto MapFromDomainModel(Core.FeedDomain.Feed fetchedFeed)
     {
         return fetchedFeed.FeedType switch
         {
@@ -57,5 +57,19 @@ public static class Mappers
             VideoUrl = fetchedFeed.VideoUrl,
             Likes = fetchedFeed.Likes
         };
+    }
+
+    internal static Core.FeedDomain.Feed MapToDomainModel(FeedDto feedDto)
+    {
+        return Core.FeedDomain.Feed.CreateFeed(
+                feedDto.Id,
+                feedDto.UserId,
+                feedDto.Title,
+                feedDto.Description,
+                feedDto.FeedType,
+                feedDto.Likes,
+                feedDto.ImageUrl,
+                feedDto.VideoUrl
+            );
     }
 }

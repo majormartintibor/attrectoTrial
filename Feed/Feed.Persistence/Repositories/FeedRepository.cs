@@ -1,9 +1,7 @@
 ﻿using Feed.Core.Exceptions;
-using Feed.Core.FeedDomain;
 using Feed.Core.FeedDomain.Ports;
+using Feed.Persistence.Mappers;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
-using static Feed.Core.FeedDomain.Feed;
 
 namespace Feed.Persistence.Repositories;
 internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> contextFactory) : IFeedRepository
@@ -14,7 +12,7 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        Entity.Feed feedToSave = MapFromDomainModel(feed);
+        Entity.Feed feedToSave = FeedMappers.MapFromDomainModel(feed);
 
         await context.Feeds.AddAsync(feedToSave);
         await context.SaveChangesAsync();        
@@ -25,7 +23,7 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
         using var context = await _contextFactory.CreateDbContextAsync();
 
         var feed = await context.Feeds.FirstOrDefaultAsync(f => f.Id == id) 
-            ?? throw new FeedNotFoundException($"Feed with ID {id} not found.");
+            ?? throw new FeedNotFoundException(id);
         feed.IsDeleted = true;
         await context.SaveChangesAsync();
     }
@@ -46,9 +44,9 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
             //performance optimization, we do not need change tracking
             .AsNoTracking()
             .FirstOrDefaultAsync(f => f.Id == id && !f.IsDeleted) 
-                ?? throw new FeedNotFoundException($"Feed with ID {id} not found.");
+                ?? throw new FeedNotFoundException(id);
 
-        Core.FeedDomain.Feed feedToReturn = MapFromPersistenceModel(feed);
+        Core.FeedDomain.Feed feedToReturn = FeedMappers.MapFromPersistenceModel(feed);
 
         return feedToReturn;
     }    
@@ -61,7 +59,7 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
             .AsNoTracking()
             .Where(f => !f.IsDeleted)
             .Include(f => f.UserFeedLikes)
-            .Select(f => MapFromPersistenceModel(f))
+            .Select(f => FeedMappers.MapFromPersistenceModel(f))
             .ToListAsync();        
     }
 
@@ -69,78 +67,11 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
     {
         using var context = await _contextFactory.CreateDbContextAsync();        
 
-        var feedToUpdate = await context.Feeds.FirstAsync(f => f.Id == feed.Id);
-        //map missing
+        var feedToUpdate = await context.Feeds.FirstOrDefaultAsync(f => f.Id == feed.Id)
+            ?? throw new FeedNotFoundException(feed.Id);
+
+        FeedMappers.MapFromDomainModel(feed, feedToUpdate);
 
         await context.SaveChangesAsync();
-    }
-
-    private static Core.FeedDomain.Feed MapFromPersistenceModel(Entity.Feed feed)
-    {
-        return CreateFeed(
-                feed.Id,
-                feed.UserId,
-                feed.Title,
-                feed.Description,
-                feed.FeedType,
-                feed.UserFeedLikes.Count,
-                feed.ImageUrl,
-                feed.VideoUrl
-            );
-    }
-    
-    private static Entity.Feed MapFromDomainModel(Core.FeedDomain.Feed feed)
-    {
-        return feed.FeedType switch
-        {
-            FeedType.Text => MapToTextFeed(feed),
-            FeedType.Image => MapToImageFeed(feed),
-            FeedType.Video => MapToVideoFeed(feed),
-            _ => throw new InvalidEnumArgumentException()
-        };
-    }
-
-    private static Entity.Feed MapToTextFeed(Core.FeedDomain.Feed feed)
-    {
-        var textFeed = feed as TextFeed;
-        return new Entity.Feed()
-        {
-            Id = textFeed!.Id,
-            UserId = textFeed.UserId,
-            Title = textFeed.Title,
-            Description = textFeed.Description,
-            FeedType = FeedType.Text
-        };
-    }
-
-    private static Entity.Feed MapToImageFeed(Core.FeedDomain.Feed feed)
-    {
-        var imageFeed = feed as ImageFeed;
-
-        return new Entity.Feed()
-        {
-            Id = imageFeed!.Id,
-            UserId = imageFeed.UserId,
-            Title = imageFeed.Title,
-            Description = imageFeed.Description,
-            FeedType = FeedType.Image,
-            ImageUrl = imageFeed.ImageUrl
-        };
-    }
-
-    private static Entity.Feed MapToVideoFeed(Core.FeedDomain.Feed feed)
-    {
-        var videoFeed = feed as VideoFeed;
-
-        return new Entity.Feed()
-        {
-            Id = videoFeed!.Id,
-            UserId = videoFeed.UserId,
-            Title = videoFeed.Title,
-            Description = videoFeed.Description,
-            FeedType = FeedType.Video,
-            ImageUrl = videoFeed.ImageUrl,
-            VideoUrl = videoFeed.VideoUrl
-        };
-    }
+    }       
 }
