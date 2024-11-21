@@ -57,11 +57,19 @@ public static class SeedData
         // Seed Users
         var users = UserGuids.Select(kvp => new User { Id = kvp.Value }).ToList();
         context.Users.AddRange(users);
-                
+
         // Create a Faker instance for generating feed data
         var feedFaker = new Faker<Entity.Feed>()
-            .RuleFor(f => f.Title, f => f.Lorem.Sentence(1, 5)[..Math.Min(f.Lorem.Sentence(1, 5).Length, 20)])
-            .RuleFor(f => f.Description, f => f.Lorem.Paragraph()[..Math.Min(f.Lorem.Paragraph().Length, 2000)])
+            .RuleFor(f => f.Title, f =>
+            {
+                var title = f.Lorem.Sentence(1, 5);
+                return title.Length > 20 ? title.Substring(0, 20) : title;
+            })
+            .RuleFor(f => f.Description, f =>
+            {
+                var description = f.Lorem.Paragraph();
+                return description.Length > 2000 ? description.Substring(0, 2000) : description;
+            })
             .RuleFor(f => f.ImageUrl, f => f.Internet.Url())
             .RuleFor(f => f.VideoUrl, f => f.Internet.Url());
 

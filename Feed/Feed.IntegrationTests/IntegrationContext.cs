@@ -23,22 +23,31 @@ public abstract class IntegrationContext(
     {
         //This is a quick and dirty hack now, if I have time I will clean this up later
         //if not, it is not the end of the world :)
-        using var context 
+        using var context
             = CreateApplicationDbContext("Host=localhost;port=5432;Database=FeedDb;Username=postgres;Password=postgres;persist security info=true;");
-                
+
         // Clear existing data except seed data
-        await context.UserFeedLikes
+        context.UserFeedLikes
+            .AsEnumerable()
             .Where(ufl => !SeedData.UserFeedLikeGuids.Values
-                .Any(seed => seed.UserId == ufl.UserId && seed.FeedId == ufl.FeedId))
-            .ExecuteDeleteAsync();
+            .Any(seed => seed.UserId == ufl.UserId && seed.FeedId == ufl.FeedId))
+            .ToList()
+            .ForEach(ufl => context.UserFeedLikes.Remove(ufl));
+        await context.SaveChangesAsync();
 
-        await context.Feeds
-            .Where(f => !SeedData.FeedGuids.Values.Contains(f.Id))
-            .ExecuteDeleteAsync();
+        context.Feeds
+            .AsEnumerable()
+            .Where(f => !SeedData.FeedGuids.ContainsValue(f.Id))
+            .ToList()
+            .ForEach(f => context.Feeds.Remove(f));
+        await context.SaveChangesAsync();
 
-        await context.Users
-            .Where(u => !SeedData.UserGuids.Values.Contains(u.Id))
-            .ExecuteDeleteAsync();
+        context.Users
+            .AsEnumerable()
+            .Where(u => !SeedData.UserGuids.ContainsValue(u.Id))
+            .ToList()
+            .ForEach(u => context.Users.Remove(u));
+        await context.SaveChangesAsync();
 
         //reseed the database to initial baseline state
         //if data exists returns without doing anything

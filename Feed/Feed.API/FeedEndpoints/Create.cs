@@ -21,7 +21,7 @@ public sealed record CreateFeedCommand(
             RuleFor(x => x).NotNull();
             RuleFor(x => x.UserId).NotNull();
             RuleFor(x => x.Title).MinimumLength(5);
-            RuleFor(x => x.Title).MinimumLength(20);
+            RuleFor(x => x.Title).MaximumLength(20);
             RuleFor(x => x.Description).MaximumLength(2000);
 
             //could do conditional validation based on FeedType on the Image and Video Urls that they have to be a
