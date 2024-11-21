@@ -38,10 +38,15 @@ builder.Host.UseWolverine(opts =>
     opts.Durability.Mode = DurabilityMode.MediatorOnly;
 });
 
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() 
+    || app.Environment.EnvironmentName == "docker")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -64,7 +69,8 @@ app.MapWolverineEndpoints(opts =>
 
 app.UseHttpsRedirection();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment()
+    || app.Environment.EnvironmentName == "docker")
 {
     app.SeedDatabase();
 }
