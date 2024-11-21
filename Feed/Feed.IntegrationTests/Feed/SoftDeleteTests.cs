@@ -16,7 +16,7 @@ public sealed class SoftDeleteTests(AppFixture fixture) : GivenFeedsExist(fixtur
         var scenario = await Host.Scenario(x =>
         {
             x.Patch
-                .Json(new DeleteFeedCommand())
+                .Json(new DeleteFeedCommand(SeedData.UserGuids["User1"]))
                 .ToUrl(DeleteEndpoint + SeedData.FeedGuids["Feed1"]);
 
             x.StatusCodeShouldBeOk();
@@ -37,28 +37,7 @@ public sealed class SoftDeleteTests(AppFixture fixture) : GivenFeedsExist(fixtur
         var scenario = await Host.Scenario(x =>
         {
             x.Patch
-                .Json(new DeleteFeedCommand())
-                .ToUrl(DeleteEndpoint + SeedData.FeedGuids["Feed2"]);
-
-            x.StatusCodeShouldBeOk();
-        });
-
-        var notFoundscenario = await Host.Scenario(x =>
-        {
-            x.Get
-                .Url(GetEndpoint + SeedData.FeedGuids["Feed2"]);
-
-            x.StatusCodeShouldBe(StatusCodes.Status404NotFound);
-        });
-    }
-
-    [Fact]
-    public async Task Soft_deleting_a_Video_Feed_should_succeed()
-    {
-        var scenario = await Host.Scenario(x =>
-        {
-            x.Patch
-                .Json(new DeleteFeedCommand())
+                .Json(new DeleteFeedCommand(SeedData.UserGuids["User2"]))
                 .ToUrl(DeleteEndpoint + SeedData.FeedGuids["Feed3"]);
 
             x.StatusCodeShouldBeOk();
@@ -71,5 +50,39 @@ public sealed class SoftDeleteTests(AppFixture fixture) : GivenFeedsExist(fixtur
 
             x.StatusCodeShouldBe(StatusCodes.Status404NotFound);
         });
+    }
+
+    [Fact]
+    public async Task Soft_deleting_a_Video_Feed_should_succeed()
+    {
+        var scenario = await Host.Scenario(x =>
+        {
+            x.Patch
+                .Json(new DeleteFeedCommand(SeedData.UserGuids["User3"]))
+                .ToUrl(DeleteEndpoint + SeedData.FeedGuids["Feed5"]);
+
+            x.StatusCodeShouldBeOk();
+        });
+
+        var notFoundscenario = await Host.Scenario(x =>
+        {
+            x.Get
+                .Url(GetEndpoint + SeedData.FeedGuids["Feed5"]);
+
+            x.StatusCodeShouldBe(StatusCodes.Status404NotFound);
+        });
+    }
+
+    [Fact]
+    public async Task Soft_deleting_another_users_feed_returns_unauthorized()
+    {
+        var scenario = await Host.Scenario(x =>
+        {
+            x.Patch
+                .Json(new DeleteFeedCommand(SeedData.UserGuids["User1"]))
+                .ToUrl(DeleteEndpoint + SeedData.FeedGuids["Feed5"]);
+
+            x.StatusCodeShouldBe(StatusCodes.Status401Unauthorized);
+        });        
     }
 }

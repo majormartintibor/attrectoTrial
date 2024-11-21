@@ -53,6 +53,10 @@ any business value. I prefer to use the term integration tests for this kind of 
 
 I have came up with some validation rules and written a few tests for them. It is not meant to be complete, just a sample.
 
+## API Testing
+I think it is fair to say, that you could consider my Intgration Test setup as aslo being API and end to end test.
+My personal bias is that many applications would be fine with only this kind of testing.
+
 # API design
 I plan to include API versioning with URL versioning.
 
