@@ -28,12 +28,14 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
         await context.SaveChangesAsync();
     }
 
-    public async Task HardDeleteFeedAsync(Guid id)
+    public async Task HardDeleteFeedsAsync()
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var feedToRemove = await context.Feeds.FirstAsync(f => f.Id == id);
-        context.Feeds.Remove(feedToRemove);        
+        var feedsToRemove = await context.Feeds
+            .Where(f => f.IsDeleted)
+            .ToListAsync();
+        context.Feeds.RemoveRange(feedsToRemove);        
         await context.SaveChangesAsync();
     }
 
@@ -73,5 +75,15 @@ internal sealed class FeedRepository(IDbContextFactory<ApplicationDbContext> con
         FeedMappers.MapFromDomainModel(feed, feedToUpdate);
 
         await context.SaveChangesAsync();
-    }       
+    }
+
+    public async Task<List<Core.FeedDomain.Feed>> GetFeedsAsyncIncludeSoftDeleted()
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+
+        return await context.Feeds
+            .AsNoTracking()            
+            .Select(f => FeedMappers.MapFromPersistenceModel(f))
+            .ToListAsync();
+    }
 }

@@ -127,7 +127,7 @@ public abstract record FeedCommand
         string VideoUrl = "");
     public sealed record UpdateFeed(Feed Feed);
     public sealed record SoftDeleteFeed(Guid FeedId);
-    public sealed record HardDeleteFeed(Guid FeedId);
+    public sealed record HardDeleteFeeds();
     public sealed record GetFeed(Guid FeedId);
     public sealed record ListFeeds();
 }
@@ -178,13 +178,13 @@ public static class SofDeleteFeedHandler
     }
 }
 
-public static class HardDeleteFeedHandler
+public static class HardDeleteFeedsHandler
 {
     public static async Task Handle(
-        HardDeleteFeed command,
+        HardDeleteFeeds command,
         IFeedRepository feedRepository)
     {
-        await feedRepository.HardDeleteFeedAsync(command.FeedId);
+        await feedRepository.HardDeleteFeedsAsync();
     }
 }
 

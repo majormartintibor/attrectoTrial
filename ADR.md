@@ -24,6 +24,10 @@ I like this stack, because while it does enable me to build classic CRUD style s
 possibility to use PostgreSQL as a document store or even build full blown event sourced applications and turning PostgreSQL into an event store.
 Further more I even have the option to use the same database as relational db, document db and event store at the same time!
 
+## Quartz for background jobs
+
+Hard Delete for sof deleted feeds at midnight has been implemented with Quartz. Quartz is an OSS library made exactly for use cases like this.
+
 ## Additional notes
 Wolverine has strong EF core integration as well, I could have used Wolverine in the persistence layer as well. I purposely decided to not do so.
 Instead I wanted to show the Hexagonal aka Ports and Adapters approach, where the interface of outgoing ports (from the Cores perspective) is 

@@ -5,7 +5,7 @@ using Feed.Core.FeedDomain;
 
 namespace Feed.API.FeedEndpoints;
 
-//Could contain filter parameters
+//Could contain filter parameters. That's why I leave it in despite being unused for now.
 public sealed record ListFeedQuery()
 {
     public sealed class ListFeedQueryValidator : AbstractValidator<ListFeedQuery>

@@ -1,4 +1,5 @@
 using Feed.API;
+using Feed.API.BackgroundJobs;
 using Feed.Core;
 using Feed.Persistence;
 using Oakton;
@@ -37,6 +38,8 @@ builder.Host.UseWolverine(opts =>
     //since I use it for mediator pattern only I can turn down some overhead
     opts.Durability.Mode = DurabilityMode.MediatorOnly;
 });
+
+builder.Services.ConfigureMidnightCleanup();
 
 // Configure logging
 builder.Logging.ClearProviders();

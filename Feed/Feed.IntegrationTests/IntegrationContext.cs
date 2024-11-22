@@ -1,6 +1,9 @@
 ﻿using Alba;
+using Feed.Core.FeedDomain.Ports;
 using Feed.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Wolverine;
 using Wolverine.Tracking;
 
 namespace Feed.IntegrationTests;
@@ -17,7 +20,8 @@ public abstract class IntegrationContext(
 {
     private readonly AppFixture _fixture = fixture;
 
-    public IAlbaHost Host => _fixture.Host;
+    public IAlbaHost Host => _fixture.Host;    
+    public IFeedRepository FeedRepository => _fixture.Host.Services.GetRequiredService<IFeedRepository>();
 
     public virtual async Task InitializeAsync()
     {
@@ -29,30 +33,7 @@ public abstract class IntegrationContext(
         //to do full reset
         await context.UserFeedLikes.ExecuteDeleteAsync();
         await context.Feeds.ExecuteDeleteAsync();
-        await context.Users.ExecuteDeleteAsync();
-
-        // Clear existing data except seed data
-        //context.UserFeedLikes
-        //    .AsEnumerable()
-        //    .Where(ufl => !SeedData.UserFeedLikeGuids.Values
-        //    .Any(seed => seed.UserId == ufl.UserId && seed.FeedId == ufl.FeedId))
-        //    .ToList()
-        //    .ForEach(ufl => context.UserFeedLikes.Remove(ufl));
-        //await context.SaveChangesAsync();
-
-        //context.Feeds
-        //    .AsEnumerable()
-        //    .Where(f => !SeedData.FeedGuids.ContainsValue(f.Id))
-        //    .ToList()
-        //    .ForEach(f => context.Feeds.Remove(f));
-        //await context.SaveChangesAsync();
-
-        //context.Users
-        //    .AsEnumerable()
-        //    .Where(u => !SeedData.UserGuids.ContainsValue(u.Id))
-        //    .ToList()
-        //    .ForEach(u => context.Users.Remove(u));
-        //await context.SaveChangesAsync();
+        await context.Users.ExecuteDeleteAsync();        
 
         //reseed the database to initial baseline state
         //if data exists returns without doing anything
